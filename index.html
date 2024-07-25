@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Music Library</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
+  <style>
+    body, html {
+      width: 100%;
+      margin: 0;
+      padding: 0;
+      overflow-x: hidden;
+      background-color: #000000;
+      color: #E0E0E0;
+    }
+
+    .navbar-main {
+      width: 100%;
+      background-color: #2F2E2E;
+    }
+
+    .navbar-nav .nav-link {
+      padding: 0 15px;
+    }
+
+    .sidebar {
+      height: calc(100vh - 56px);
+      background-color: #2F2E2E;
+      color: #FFFFFF;
+      overflow-y: auto;
+      position: fixed;
+      top: 56px;
+      width: 20%;
+    }
+
+    .content {
+      margin-left: 20%;
+      padding: 20px;
+      background-color: #0A0A0A;
+      color: #FFFFFF;
+      overflow-y: auto;
+    }
+
+    .card {
+      margin-bottom: 10px;
+      background-color: #1E1E1E;
+      color: #DDDDDD;
+      border: 1px solid #444;
+      padding: 10px;
+      display: flex;
+      flex-direction: row;
+      font-size: 0.75em;
+    }
+
+    .card img {
+      max-width: 100px;
+      max-height: 100px;
+      margin-right: 10px;
+    }
+
+    .request-button, .info-button {
+      background-color: #0D47A1;
+      color: #FFFFFF;
+      border: none;
+      margin: 0 5px;
+      padding: 5px 10px;
+    }
+
+    .request-button:hover, .info-button:hover {
+      background-color: #1565C0;
+    }
+
+    .card-body {
+      flex: 1;
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .card-text {
+      font-weight: 400;
+      margin-right: 10px;
+    }
+
+    .modal-content {
+      background-color: #1E1E1E;
+      color: #DDDDDD;
+    }
+
+    .modal-header, .modal-footer {
+      border-color: #444;
+    }
+
+    .modal-body {
+      font-size: 0.875em;
+    }
+
+    .d-flex {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .card-body {
+      flex: 1;
+    }
+  </style>
+</head>
+
+<body>
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark navbar-main">
+    <a class="navbar-brand" href="#">KOHLYDE <i class="fas fa-record-vinyl"></i></a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse justify-content-end" id="navbarNavAltMarkup">
+      <div class="navbar-nav">
+        <a class="nav-link" href="#home">Home</a>
+        <a class="nav-link" href="#about">About</a>
+        <a class="nav-link" href="#music">Music</a>
+        <a class="nav-link" href="#sample-packs">Sample Packs</a>
+        <a class="nav-link" href="#contact">Contact</a>
+        <a class="nav-link" href="tel:+123456789"><i class="fas fa-phone"></i></a>
+        <a class="nav-link" href="mailto:example@gmail.com"><i class="fas fa-envelope"></i></a>
+        <a class="nav-link" href="https://github.com/"><i class="fab fa-github"></i></a>
+      </div>
+    </div>
+  </nav>
+
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-md-3 sidebar">
+        <!-- Accordion Sidebar -->
+        <div id="accordion">
+          <div class="card">
+            <div class="card-header" id="headingOne">
+              <h5 class="mb-0">
+                <button class="btn btn-link" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                  Genres
+                </button>
+              </h5>
+            </div>
+            <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordion">
+              <div class="card-body">
+                <ul id="genresList">
+                  <!-- Dynamic genres will be loaded here -->
+                </ul>
+              </div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-header" id="headingTwo">
+              <h5 class="mb-0">
+                <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                  Labels
+                </button>
+              </h5>
+            </div>
+            <div id="collapseTwo" class="collapse show" aria-labelledby="headingTwo" data-parent="#accordion">
+              <div class="card-body">
+                <ul id="labelsList">
+                  <!-- Dynamic labels will be loaded here -->
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-9 content" id="mainContent">
+        <!-- Main Content will be loaded here -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal -->
+  <div class="modal fade" id="infoModal" tabindex="-1" role="dialog" aria-labelledby="infoModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="infoModalLabel">Info</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <!-- Detailed information will be loaded here -->
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+  <script>
+    $(document).ready(function() {
+      const primaryGenres = [
+        "Acid House", "Action", "Africa", "Afro House", "Afro Latin", "Afrobeat", "Amapiano",
+        "Ambient", "Artist Series", "Asia", "Bass", "Bass House", "Bass Music", "Blues",
+        "Brass & Woodwind", "Breaks", "Breaks Archive", "Chill Trap", "Chillout", "Cinematic",
+        "Classic Hip Hop", "Classic House", "Club Archive", "Complextro", "Country", "DJ Mixtools",
+        "DJ Tools", "Dancehall", "Deep House", "Disco", "Downtempo", "Drill", "Drum and Bass",
+        "Drums", "Drumstep", "Dub", "Dub Techno", "Dubstep", "EDM", "Electro", "Electro House",
+        "Electronica", "Essential Series", "Europe", "FX", "Fidget House", "Filmscore", "Free Samples",
+        "Funk", "Funky House", "Future Bass", "Future House", "Future Pop", "Future RnB", "Garage",
+        "Glitch", "Grime", "Guitars", "Halftime", "Hard Dance", "Hardcore", "Hip Hop", "Horror",
+        "House", "IDM", "India", "Indie Pop", "Industrial Techno", "Instruments", "Intro Packs",
+        "Jazz", "Jump Up", "Jungle", "Keyboards", "Label Samplers", "Liquid", "Live Music",
+        "Lo-Fi Hip Hop", "Lo-Fi House", "Melodic Techno", "Middle East", "Minimal Techno", "Moombah",
+        "Music Courses", "Neo Soul", "Neurofunk", "Nu Disco", "Orchestral", "Origin Series",
+        "Patchworx", "Percussion", "Pop", "Progressive House", "Psy Trance", "Reggae", "Reggaeton",
+        "Rock", "Sci-Fi", "Series", "Soul", "Soul and RnB", "Sound Archives", "South American",
+        "Strings", "Synth Explorer", "Synths", "Synthwave", "Tech House", "Techno", "Trance",
+        "Trap", "Tribal House", "Trip Hop", "Tropical House", "US Hip Hop", "Ultimate Series",
+        "Urban", "Urban Archive", "Vibes Series", "Vocals", "World"
+      ];
+
+      const labelsList = [
+        "12inchsounds", "21STRXXT Samples", "5Pin Media", "91Vocals", "AMG GOLD", "AUDEOBOX",
+        "Abstract Sounds", "Access Vocals", "Aim Audio", "Akai Professional", "Alliant Audio",
+        "Apollo Sound", "Artisan Audio", "Audiomodern", "Audiostrasse", "Aubit Sound", "Beatport Sounds",
+        "BFractal Music", "Big Fish Audio", "Bingoshakerz", "Black Octopus", "Blind Audio",
+        "British Music Library", "CAPSUN ProAudio", "CONNECTD Audio", "Channel Robot", "Cinetools",
+        "Class A Samples", "Cluster Sound", "Codex Samples", "Datacode", "DABRO Music", "Deeperfect",
+        "Delectable Records", "Discovery Sound", "Diverge Synthesis", "Dropgun Samples", "DrumDrops",
+        "Dubdrops", "EarthMoments", "EarthTone", "EDM Ghost Production", "EDM Gold", "EST Studios",
+        "Element One", "Element&", "Engineering Samples", "Equipped Music", "ETHEREAL2080",
+        "F9 Audio", "FatLoud", "FaderPro", "Famous Audio", "Famous Music", "Function Loops",
+        "Freaky Loops", "Frontline Producer", "Galbanum", "Get Down Samples", "Ghost Syndicate",
+        "Global Underground", "GoldBaby", "Hachion Sound", "Hed/Nod", "Hitmakers", "Hollywood Loops",
+        "House Of Loop", "IQ Samples", "Image Sounds", "Industrial Strength", "Infrasonik",
+        "Inspire Audio", "Julez Jadon", "Keep It Sample", "Kittball Records", "Komorebi Audio",
+        "Konturi", "LP24 Audio", "Laniakea Sounds", "Leitmotif", "Loopcloud", "Loopmasters",
+        "Looptone", "Lost Audio", "Mainground Music", "Mask Movement Samples", "MassiveSynth",
+        "Mind Flux", "ModeAudio", "Monster Sounds", "Monstercat", "Moody Recordings", "Mootant",
+        "Munchies Jukebox", "Mutekki Media", "Niche Audio", "Noise Design", "Noisefactory",
+        "ODD SMPLS", "OST Audio", "OneZero Samples", "Organic Loops", "Origin Sound",
+        "Particular", "Pelham & Junior", "Plugin Boutique", "Prime Loops", "Producer Loops",
+        "Producertech", "Production Master", "Puremagnetik", "Push Button Bang", "Quantum Loops",
+        "RV Samplepacks", "Rankin Audio", "Raw Cutz", "Renegade Audio", "Resonance Sound",
+        "Rewind Samples", "Rhythm Paints", "Riemann Kollektion", "SAMPLESOUND", "SFXtools",
+        "SHARP", "Sample Diggers", "Sample Magic", "Samplephonics", "Samplestar", "Samplestate",
+        "ShamanStems", "Shuriken Audio", "Simber Sounds", "Singomakers", "Skifonix",
+        "SmallPrint Ingredients", "Sofa Squared", "Sonic Academy", "Sonic Mechanics",
+        "Soniccouture", "Sonicwire", "Soul Rush Records", "Soulsounds", "Sound Effects Bible",
+        "Sound Propulsion", "Sound4Group", "SoundFreqs", "Soundbox", "Sounds/To/Sample",
+        "Soundsmiths", "Streamline Samples", "Synth Magic", "System 6 Samples", "THICK Sounds",
+        "TONE KITCHN", "TOUCH LOOPS", "The Tone Foundry", "Toolroom", "Track Team Audio",
+        "Transmission", "Triad Sounds", "Tsunami Track Sounds", "UNDRGRND SOUNDS", "Unity Records",
+        "Vital Vocals", "Vocal Roads", "WM Entertainment", "Wave Alchemy", "Wavescape Studios",
+        "Wavetick", "YNK Audio", "ZTEKNO", "Zenhiser", "eLAB"
+      ];
+
+      let currentIndex = 0;
+      const itemsPerLoad = 10;
+      let allData = [];
+
+      function preprocessText(text) {
+        return text.trim().replace(/\s+/g, ' ');
+      }
+
+      function loadContent(data) {
+        let contentHtml = '';
+        const endIndex = Math.min(currentIndex + itemsPerLoad, data.length);
+        for (let i = currentIndex; i < endIndex; i++) {
+          const item = data[i];
+          const firstParagraph = item.description.split('</p>')[0] + '</p>';
+          const cleanedDescription = preprocessText(firstParagraph);
+          contentHtml += `
+            <div class="card">
+              <div class="d-flex">
+                <img src="${item.coverImageUrl}" class="card-img-top" alt="${item.title}">
+                <div class="card-body">
+                  <h5 class="card-title">${item.title}</h5>
+                  <p class="card-text">${cleanedDescription}</p>
+                  <div class="d-flex justify-content-end">
+                    <a href="${item.demosong}" class="btn request-button">Request</a>
+                    <button class="btn info-button" data-toggle="modal" data-target="#infoModal" data-content="${encodeURIComponent(item.description)}">Info</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          `;
+        }
+        $('#mainContent').append(contentHtml);
+        currentIndex = endIndex;
+      }
+
+      function loadSidebar() {
+        let genresHtml = '';
+        let labelsHtml = '';
+
+        primaryGenres.sort().forEach(genre => {
+          genresHtml += `<li><a href="#" class="genre-link">${genre}</a></li>`;
+        });
+
+        labelsList.sort().forEach(label => {
+          labelsHtml += `<li><a href="#" class="label-link">${label}</a></li>`;
+        });
+
+        $('#genresList').html(genresHtml);
+        $('#labelsList').html(labelsHtml);
+      }
+
+      $(document).on('click', '.genre-link', function(e) {
+        e.preventDefault();
+        const selectedGenre = $(this).text();
+        currentIndex = 0;
+        $('#mainContent').html('');
+        const filteredData = allData.filter(item => item.maingenre === selectedGenre);
+        loadContent(filteredData);
+      });
+
+      $(document).on('click', '.label-link', function(e) {
+        e.preventDefault();
+        const selectedLabel = $(this).text();
+        currentIndex = 0;
+        $('#mainContent').html('');
+        const filteredData = allData.filter(item => item.labelname === selectedLabel);
+        loadContent(filteredData);
+      });
+
+      $('#infoModal').on('show.bs.modal', function (event) {
+        var button = $(event.relatedTarget);
+        var content = decodeURIComponent(button.data('content'));
+        var modal = $(this);
+        modal.find('.modal-body').html(content);
+      });
+
+      $.getJSON('products.json', function(data) {
+        allData = data;
+        loadContent(allData);
+      });
+
+      loadSidebar();
+
+      // Lazy load content
+      $(window).scroll(function() {
+        if ($(window).scrollTop() + $(window).height() >= $(document).height() - 10) {
+          loadContent(allData);
+        }
+      });
+    });
+  </script>
+</body>
+</html>
